@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analysis Results - Uro Diagnostics AI</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-icon">🔬</div><span>Uro AI</span></div>
+      <ul class="nav-menu">
+        <li><a href="dashboard.html" class="nav-link">📊 <span>Dashboard</span></a></li>
+        <li><a href="patient.html" class="nav-link">👤 <span>New Patient</span></a></li>
+        <li><a href="upload.html" class="nav-link">📷 <span>Scan Strip</span></a></li>
+        <li><a href="history.html" class="nav-link">📁 <span>Records</span></a></li>
+      </ul>
+      <div class="sidebar-footer">
+        <button id="theme-toggle" class="btn btn-secondary" style="width: 100%;">🌙</button>
+        <button id="logout-btn" class="btn btn-secondary" style="width: 100%;">🚪 Logout</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="top-header">
+        <div class="header-title">
+          <h1>Analysis & Medical Breakdown</h1>
+          <p id="patient-subtitle">Diagnostic metrics calculated via computer vision</p>
+        </div>
+        <div class="header-actions">
+          <button onclick="saveToHistory()" class="btn btn-secondary">💾 Save Record</button>
+          <button onclick="generatePDFReport()" class="btn btn-primary">📄 Export PDF</button>
+        </div>
+      </header>
+
+      <!-- Overall Summary Card -->
+      <div class="glass-card" style="margin-bottom: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <div>
+            <h3>Overall Evaluation</h3>
+            <p id="risk-summary-text" style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem;"></p>
+          </div>
+          <div style="text-align: right;">
+            <span id="risk-badge" class="badge">--</span>
+            <div id="risk-score-val" style="font-size: 1.5rem; font-weight: 700; margin-top: 0.25rem;">0%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analytes Cards Grid -->
+      <div id="analytes-grid" class="grid-3"></div>
+    </main>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/pdf.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const patient = JSON.parse(localStorage.getItem('activePatient'));
+      const analysis = JSON.parse(localStorage.getItem('currentAnalysis'));
+
+      if (!patient || !analysis) {
+        showToast('No active analysis session found.', 'error');
+        setTimeout(() => window.location.href = 'patient.html', 1500);
+        return;
+      }
+
+      document.getElementById('patient-subtitle').innerText = `Patient: ${patient.name} (${patient.id}) | Dr. ${patient.doctor}`;
+      document.getElementById('risk-summary-text').innerText = analysis.summary;
+      
+      const badge = document.getElementById('risk-badge');
+      badge.innerText = analysis.overallRisk;
+      badge.className = `badge ${analysis.overallRisk === 'Low Risk' ? 'badge-normal' : (analysis.overallRisk === 'High Risk' ? 'badge-abnormal' : 'badge-borderline')}`;
+      
+      document.getElementById('risk-score-val').innerText = `Risk Index: ${analysis.riskScore}/100`;
+
+      // Render Analyte Cards
+      const grid = document.getElementById('analytes-grid');
+      grid.innerHTML = '';
+
+      Object.keys(analysis.analytes).forEach(key => {
+        const item = analysis.analytes[key];
+        let statusBadge = 'badge-normal';
+        if (item.status === 'Abnormal') statusBadge = 'badge-abnormal';
+        if (item.status === 'Borderline') statusBadge = 'badge-borderline';
+
+        const card = document.createElement('div');
+        card.className = 'glass-card';
+        card.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.75rem;">
+            <h4 style="font-size: 1rem;">${item.name}</h4>
+            <span class="badge ${statusBadge}">${item.status}</span>
+          </div>
+          <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary);">${item.value} <span style="font-size: 0.85rem; color: var(--text-muted);">${item.unit}</span></div>
+          <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">Reference: ${item.reference}</p>
+        `;
+        grid.appendChild(card);
+      });
+    });
+
+    function saveToHistory() {
+      const patient = JSON.parse(localStorage.getItem('activePatient'));
+      const analysis = JSON.parse(localStorage.getItem('currentAnalysis'));
+      const image = localStorage.getItem('uploadedStripImage');
+
+      if (!patient || !analysis) return;
+
+      let history = JSON.parse(localStorage.getItem('patientReportsHistory')) || [];
+      history.push({ patient, analysis, image, id: Date.now() });
+      localStorage.setItem('patientReportsHistory', JSON.stringify(history));
+      showToast('Record saved to Patient History Archival!', 'success');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient History - Uro Diagnostics AI</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-icon">🔬</div><span>Uro AI</span></div>
+      <ul class="nav-menu">
+        <li><a href="dashboard.html" class="nav-link">📊 <span>Dashboard</span></a></li>
+        <li><a href="patient.html" class="nav-link">👤 <span>New Patient</span></a></li>
+        <li><a href="upload.html" class="nav-link">📷 <span>Scan Strip</span></a></li>
+        <li><a href="history.html" class="nav-link active">📁 <span>Records</span></a></li>
+      </ul>
+      <div class="sidebar-footer">
+        <button id="theme-toggle" class="btn btn-secondary" style="width: 100%;">🌙</button>
+        <button id="logout-btn" class="btn btn-secondary" style="width: 100%;">🚪 Logout</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="top-header">
+        <div class="header-title">
+          <h1>Patient Diagnostic History</h1>
+          <p>Search, filter, inspect, and delete historical urine reports</p>
+        </div>
+      </header>
+
+      <div class="glass-card" style="margin-bottom: 1.5rem;">
+        <div class="grid-2">
+          <input type="text" id="search-patient" class="form-control" placeholder="Search by Patient Name or ID...">
+          <select id="filter-risk" class="form-control">
+            <option value="all">Filter by Risk (All)</option>
+            <option value="Low Risk">Low Risk</option>
+            <option value="Moderate Risk">Moderate Risk</option>
+            <option value="High Risk">High Risk</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="glass-card">
+        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+          <thead>
+            <tr style="border-bottom: 2px solid var(--border-color); color: var(--text-muted);">
+              <th style="padding: 1rem;">ID</th>
+              <th style="padding: 1rem;">Patient Name</th>
+              <th style="padding: 1rem;">Date</th>
+              <th style="padding: 1rem;">Risk Level</th>
+              <th style="padding: 1rem;">Physician</th>
+              <th style="padding: 1rem;">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="history-tbody"></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/history.js"></script>
+</body>
+</html>

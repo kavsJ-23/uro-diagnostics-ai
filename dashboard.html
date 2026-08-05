@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Uro Diagnostics AI</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-icon">🔬</div><span>Uro AI</span></div>
+      <ul class="nav-menu">
+        <li><a href="dashboard.html" class="nav-link active">📊 <span>Dashboard</span></a></li>
+        <li><a href="patient.html" class="nav-link">👤 <span>New Patient</span></a></li>
+        <li><a href="upload.html" class="nav-link">📷 <span>Scan Strip</span></a></li>
+        <li><a href="history.html" class="nav-link">📁 <span>Records</span></a></li>
+      </ul>
+      <div class="sidebar-footer">
+        <button id="theme-toggle" class="btn btn-secondary" style="width: 100%;">🌙</button>
+        <button id="logout-btn" class="btn btn-secondary" style="width: 100%;">🚪 Logout</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="top-header">
+        <div class="header-title">
+          <h1>Analytics Overview</h1>
+          <p>Real-time clinical diagnostics data hub</p>
+        </div>
+        <a href="patient.html" class="btn btn-primary">+ New Test</a>
+      </header>
+
+      <div class="grid-4" style="margin-bottom: 2rem;">
+        <div class="glass-card">
+          <p style="color: var(--text-muted); font-size: 0.875rem;">Total Patients</p>
+          <h2 id="stat-total" style="font-size: 2rem; margin-top: 0.5rem;">0</h2>
+        </div>
+        <div class="glass-card">
+          <p style="color: var(--text-muted); font-size: 0.875rem;">Today's Tests</p>
+          <h2 id="stat-today" style="font-size: 2rem; margin-top: 0.5rem;">0</h2>
+        </div>
+        <div class="glass-card">
+          <p style="color: var(--text-muted); font-size: 0.875rem;">Normal Reports</p>
+          <h2 id="stat-normal" style="color: var(--success); font-size: 2rem; margin-top: 0.5rem;">0</h2>
+        </div>
+        <div class="glass-card">
+          <p style="color: var(--text-muted); font-size: 0.875rem;">Abnormal / Risks</p>
+          <h2 id="stat-abnormal" style="color: var(--danger); font-size: 2rem; margin-top: 0.5rem;">0</h2>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="glass-card">
+          <h3 style="margin-bottom: 1rem;">Diagnostic Risk Distribution</h3>
+          <div style="height: 260px; position: relative;">
+            <canvas id="riskChart"></canvas>
+          </div>
+        </div>
+
+        <div class="glass-card">
+          <h3 style="margin-bottom: 1rem;">Recent Patient Scans</h3>
+          <table style="width: 100%; text-align: left; border-collapse: collapse;">
+            <thead>
+              <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-muted);">
+                <th style="padding-bottom: 0.5rem;">Patient</th>
+                <th style="padding-bottom: 0.5rem;">Date</th>
+                <th style="padding-bottom: 0.5rem;">Risk</th>
+              </tr>
+            </thead>
+            <tbody id="dashboard-recent-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
