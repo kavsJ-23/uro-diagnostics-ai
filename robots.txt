@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kavsj-23.github.io/uro-diagnostics-ai/sitemap.xml
